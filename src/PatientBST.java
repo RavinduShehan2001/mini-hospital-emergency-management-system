@@ -40,6 +40,70 @@ public class PatientBST {
         return current;
     }
 
+    public Patient searchPatient(int patientId) {
+        return searchRecursive(root, patientId);
+    }
+
+    private Patient searchRecursive(Node current, int patientId) {
+        if (current == null) {
+            return null;
+        }
+
+        if (patientId < current.patient.getPatientId()) {
+            return searchRecursive(current.left, patientId);
+        } else if (patientId > current.patient.getPatientId()) {
+            return searchRecursive(current.right, patientId);
+        }
+
+        return current.patient;
+    }
+
+    public boolean deletePatient(int patientId) {
+        if (searchPatient(patientId) == null) {
+            return false;
+        }
+
+        root = deleteRecursive(root, patientId);
+        return true;
+    }
+
+    private Node deleteRecursive(Node current, int patientId) {
+        if (current == null) {
+            return null;
+        }
+
+        if (patientId < current.patient.getPatientId()) {
+            current.left = deleteRecursive(current.left, patientId);
+        } else if (patientId > current.patient.getPatientId()) {
+            current.right = deleteRecursive(current.right, patientId);
+        } else {
+            if (current.left == null && current.right == null) {
+                return null;
+            }
+
+            if (current.left == null) {
+                return current.right;
+            }
+            if (current.right == null) {
+                return current.left;
+            }
+
+            Node successor = findSmallestNode(current.right);
+            current.patient = successor.patient;
+            current.right = deleteRecursive(current.right,
+                    successor.patient.getPatientId());
+        }
+
+        return current;
+    }
+
+    private Node findSmallestNode(Node current) {
+        while (current.left != null) {
+            current = current.left;
+        }
+        return current;
+    }
+
     public void displayInOrder() {
         if (root == null) {
             System.out.println("No patients registered. The tree is empty.");
