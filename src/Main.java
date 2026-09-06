@@ -4,6 +4,7 @@ public class Main {
 
         testPatientBST();
         testEmergencyQueue();
+        testTreatmentStack();
     }
 
     private static void testPatientBST() {
@@ -92,6 +93,58 @@ public class Main {
         emergencyQueue.displayQueue();
         dequeueAndDisplay(emergencyQueue);
         emergencyQueue.displayQueue();
+    }
+
+    private static void testTreatmentStack() {
+        System.out.println("\nTreatment Stack Tests");
+        TreatmentStack treatmentStack = new TreatmentStack();
+
+        System.out.println("\nTesting an empty stack:");
+        treatmentStack.displayTreatmentHistory();
+        popAndDisplay(treatmentStack);
+
+        TreatmentRecord treatmentA = new TreatmentRecord(201, 101, "Saman Kumara",
+                "Treatment A: Wound cleaned and dressed", "2026-09-06");
+        TreatmentRecord treatmentB = new TreatmentRecord(202, 102, "Amali Silva",
+                "Treatment B: Ankle support applied", "2026-09-06");
+        TreatmentRecord treatmentC = new TreatmentRecord(203, 103, "Kamal Fernando",
+                "Treatment C: Observation completed", "2026-09-06");
+
+        System.out.println("\nPushing treatments A (201), B (202), C (203):");
+        treatmentStack.push(treatmentA);
+        treatmentStack.push(treatmentB);
+        treatmentStack.push(treatmentC);
+        treatmentStack.displayTreatmentHistory();
+
+        System.out.println("\nPopping the top record (expected treatment C, ID 203):");
+        popAndDisplay(treatmentStack);
+        treatmentStack.displayTreatmentHistory();
+
+        System.out.println("\nPopping remaining records (expected B, then A):");
+        while (!treatmentStack.isEmpty()) {
+            popAndDisplay(treatmentStack);
+        }
+        treatmentStack.displayTreatmentHistory();
+        System.out.println("Stack is empty: " + treatmentStack.isEmpty());
+
+        System.out.println("\nAttempting to pop again from the empty stack:");
+        popAndDisplay(treatmentStack);
+
+        System.out.println("\nReusing the empty stack by pushing treatment A:");
+        treatmentStack.push(treatmentA);
+        treatmentStack.displayTreatmentHistory();
+        popAndDisplay(treatmentStack);
+        treatmentStack.displayTreatmentHistory();
+    }
+
+    private static void popAndDisplay(TreatmentStack treatmentStack) {
+        TreatmentRecord treatmentRecord = treatmentStack.pop();
+        if (treatmentRecord == null) {
+            System.out.println("The treatment stack is empty. No record can be removed.");
+        } else {
+            System.out.println("Popped treatment record ID: " + treatmentRecord.getRecordId());
+            System.out.println(treatmentRecord);
+        }
     }
 
     private static void dequeueAndDisplay(EmergencyQueue emergencyQueue) {
