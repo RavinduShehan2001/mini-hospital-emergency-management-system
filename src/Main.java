@@ -2,6 +2,11 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Mini Hospital Emergency Management System");
 
+        testPatientBST();
+        testEmergencyQueue();
+    }
+
+    private static void testPatientBST() {
         PatientBST patientTree = new PatientBST();
 
         System.out.println("\nTesting an empty tree:");
@@ -46,6 +51,57 @@ public class Main {
 
         System.out.println("\nAttempting to delete missing patient 999:");
         deleteAndDisplay(patientTree, 999);
+    }
+
+    private static void testEmergencyQueue() {
+        System.out.println("\nEmergency Queue Tests");
+        EmergencyQueue emergencyQueue = new EmergencyQueue();
+
+        System.out.println("\nTesting an empty queue:");
+        emergencyQueue.displayQueue();
+        dequeueAndDisplay(emergencyQueue);
+
+        Patient firstPatient = new Patient(101, "Saman Kumara", 19,
+                "0754567890", "Cough");
+        Patient secondPatient = new Patient(102, "Amali Silva", 30,
+                "0712345678", "Headache");
+        Patient thirdPatient = new Patient(103, "Kamal Fernando", 45,
+                "0723456789", "Back pain");
+
+        System.out.println("\nEnqueuing patients 101, 102, 103:");
+        emergencyQueue.enqueue(firstPatient);
+        emergencyQueue.enqueue(secondPatient);
+        emergencyQueue.enqueue(thirdPatient);
+        emergencyQueue.displayQueue();
+
+        System.out.println("\nDequeuing the first patient (expected 101):");
+        dequeueAndDisplay(emergencyQueue);
+        emergencyQueue.displayQueue();
+
+        System.out.println("\nDequeuing the remaining patients (expected 102, then 103):");
+        dequeueAndDisplay(emergencyQueue);
+        dequeueAndDisplay(emergencyQueue);
+        emergencyQueue.displayQueue();
+        System.out.println("Queue is empty: " + emergencyQueue.isEmpty());
+
+        System.out.println("\nAttempting to dequeue again from the empty queue:");
+        dequeueAndDisplay(emergencyQueue);
+
+        System.out.println("\nReusing the empty queue by enqueuing patient 101:");
+        emergencyQueue.enqueue(firstPatient);
+        emergencyQueue.displayQueue();
+        dequeueAndDisplay(emergencyQueue);
+        emergencyQueue.displayQueue();
+    }
+
+    private static void dequeueAndDisplay(EmergencyQueue emergencyQueue) {
+        Patient patient = emergencyQueue.dequeue();
+        if (patient == null) {
+            System.out.println("The emergency queue is empty. No patient can be removed.");
+        } else {
+            System.out.println("Dequeued patient ID: " + patient.getPatientId());
+            System.out.println(patient);
+        }
     }
 
     private static void displaySearchResult(PatientBST patientTree, int patientId) {
