@@ -29,6 +29,47 @@ public class VisitHistory {
         current.next = newNode;
     }
 
+    public Visit searchVisit(String visitId) {
+        if (visitId == null) {
+            return null;
+        }
+
+        Node current = head;
+        while (current != null) {
+            if (visitId.equals(current.visit.getVisitId())) {
+                return current.visit;
+            }
+            current = current.next;
+        }
+
+        return null;
+    }
+
+    public boolean removeVisit(String visitId) {
+        if (visitId == null) {
+            return false;
+        }
+
+        Node current = head;
+        Node previous = null;
+
+        while (current != null) {
+            if (visitId.equals(current.visit.getVisitId())) {
+                if (previous == null) {
+                    head = current.next;
+                } else {
+                    previous.next = current.next;
+                }
+                return true;
+            }
+
+            previous = current;
+            current = current.next;
+        }
+
+        return false;
+    }
+
     public void displayVisits() {
         if (head == null) {
             System.out.println("Visit history is empty. No visits are recorded.");

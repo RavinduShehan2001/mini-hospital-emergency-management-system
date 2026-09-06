@@ -150,6 +150,10 @@ public class Main {
         displayPatientVisits(firstPatient);
         displayPatientVisits(secondPatient);
 
+        System.out.println("\nSearching and removing V001 in patient 101's empty history:");
+        displayVisitSearchResult(firstPatient, "V001");
+        removeVisitAndDisplay(firstPatient, "V001");
+
         System.out.println("\nAdding V001 to patient 101:");
         firstPatient.getVisitHistory().addVisit(new Visit("V001", "2026-09-01",
                 "Dr. Perera", "Cough", "Observation completed"));
@@ -164,9 +168,66 @@ public class Main {
         firstPatient.getVisitHistory().addVisit(new Visit("V002", "2026-09-06",
                 "Dr. Fernando", "Cough follow-up", "Follow-up review completed"));
 
-        System.out.println("\nFinal independent histories (101: V001, V002; 102: V003):");
+        System.out.println("\nIndependent histories (101: V001, V002; 102: V003):");
         displayPatientVisits(firstPatient);
         displayPatientVisits(secondPatient);
+
+        System.out.println("\nAdding V004 and V005 to patient 101 for removal tests:");
+        firstPatient.getVisitHistory().addVisit(new Visit("V004", "2026-09-07",
+                "Dr. Perera", "Cough review", "Observation completed"));
+        firstPatient.getVisitHistory().addVisit(new Visit("V005", "2026-09-08",
+                "Dr. Fernando", "Follow-up", "Review completed"));
+        displayPatientVisits(firstPatient);
+
+        System.out.println("\nSearching for existing V002 and missing V999:");
+        displayVisitSearchResult(firstPatient, "V002");
+        displayVisitSearchResult(firstPatient, "V999");
+
+        System.out.println("\nRemoving head visit V001 (expected V002, V004, V005):");
+        removeVisitAndDisplay(firstPatient, "V001");
+
+        System.out.println("\nRemoving middle visit V004 (expected V002, V005):");
+        removeVisitAndDisplay(firstPatient, "V004");
+
+        System.out.println("\nRemoving last visit V005 (expected V002):");
+        removeVisitAndDisplay(firstPatient, "V005");
+
+        System.out.println("\nAttempting to remove missing V999 (V002 should remain):");
+        removeVisitAndDisplay(firstPatient, "V999");
+
+        System.out.println("\nConfirming removed V001 is no longer found:");
+        displayVisitSearchResult(firstPatient, "V001");
+
+        System.out.println("\nRemoving the only remaining visit V002:");
+        removeVisitAndDisplay(firstPatient, "V002");
+
+        System.out.println("\nAttempting to remove V002 again from the empty history:");
+        removeVisitAndDisplay(firstPatient, "V002");
+
+        System.out.println("\nPatient 102's history should still contain only V003:");
+        displayPatientVisits(secondPatient);
+    }
+
+    private static void displayVisitSearchResult(Patient patient, String visitId) {
+        Visit visit = patient.getVisitHistory().searchVisit(visitId);
+        if (visit == null) {
+            System.out.println("Visit ID " + visitId + " was not found for patient "
+                    + patient.getPatientId() + ".");
+        } else {
+            System.out.println("Visit found for patient " + patient.getPatientId() + ":");
+            System.out.println(visit);
+        }
+    }
+
+    private static void removeVisitAndDisplay(Patient patient, String visitId) {
+        if (patient.getVisitHistory().removeVisit(visitId)) {
+            System.out.println("Visit ID " + visitId + " was removed for patient "
+                    + patient.getPatientId() + ".");
+        } else {
+            System.out.println("Visit ID " + visitId + " was not found for patient "
+                    + patient.getPatientId() + ". Nothing was removed.");
+        }
+        displayPatientVisits(patient);
     }
 
     private static void displayPatientVisits(Patient patient) {
