@@ -5,6 +5,7 @@ public class Main {
         testPatientBST();
         testEmergencyQueue();
         testTreatmentStack();
+        testVisitHistory();
     }
 
     private static void testPatientBST() {
@@ -135,6 +136,43 @@ public class Main {
         treatmentStack.displayTreatmentHistory();
         popAndDisplay(treatmentStack);
         treatmentStack.displayTreatmentHistory();
+    }
+
+    private static void testVisitHistory() {
+        System.out.println("\nPatient Visit History Tests");
+
+        Patient firstPatient = new Patient(101, "Saman Kumara", 19,
+                "0754567890", "Cough");
+        Patient secondPatient = new Patient(102, "Amali Silva", 30,
+                "0712345678", "Headache");
+
+        System.out.println("\nTesting both patients' empty histories:");
+        displayPatientVisits(firstPatient);
+        displayPatientVisits(secondPatient);
+
+        System.out.println("\nAdding V001 to patient 101:");
+        firstPatient.getVisitHistory().addVisit(new Visit("V001", "2026-09-01",
+                "Dr. Perera", "Cough", "Observation completed"));
+        displayPatientVisits(firstPatient);
+
+        System.out.println("\nPatient 102 should still have an empty history:");
+        displayPatientVisits(secondPatient);
+
+        System.out.println("\nAdding V003 to patient 102 and V002 to patient 101:");
+        secondPatient.getVisitHistory().addVisit(new Visit("V003", "2026-09-02",
+                "Dr. Silva", "Headache", "Assessment completed"));
+        firstPatient.getVisitHistory().addVisit(new Visit("V002", "2026-09-06",
+                "Dr. Fernando", "Cough follow-up", "Follow-up review completed"));
+
+        System.out.println("\nFinal independent histories (101: V001, V002; 102: V003):");
+        displayPatientVisits(firstPatient);
+        displayPatientVisits(secondPatient);
+    }
+
+    private static void displayPatientVisits(Patient patient) {
+        System.out.println("Visit history for patient " + patient.getPatientId()
+                + " (" + patient.getPatientName() + "):");
+        patient.getVisitHistory().displayVisits();
     }
 
     private static void popAndDisplay(TreatmentStack treatmentStack) {
