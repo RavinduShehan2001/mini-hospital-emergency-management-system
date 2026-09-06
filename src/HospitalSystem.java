@@ -106,7 +106,7 @@ public class HospitalSystem {
         }
 
         String patientName = readText("Patient Name: ");
-        int age = readNumber("Age: ", 0);
+        int age = readAge();
         String contactNumber = readText("Contact Number: ");
         String medicalCondition = readText("Medical Condition: ");
 
@@ -125,6 +125,12 @@ public class HospitalSystem {
 
     private void deletePatient() {
         int patientId = readNumber("Patient ID: ", 1);
+        if (emergencyQueue.containsPatient(patientId)) {
+            System.out.println("Patient ID " + patientId
+                    + " is waiting in the emergency queue. Treat this patient before deleting the registration.");
+            return;
+        }
+
         if (patientTree.deletePatient(patientId)) {
             System.out.println("Patient ID " + patientId + " deleted from the patient registry.");
         } else {
@@ -135,6 +141,12 @@ public class HospitalSystem {
     private void addEmergencyPatient() {
         Patient patient = findPatientFromInput();
         if (patient == null) {
+            return;
+        }
+
+        if (emergencyQueue.containsPatient(patient.getPatientId())) {
+            System.out.println("Patient ID " + patient.getPatientId()
+                    + " is already waiting in the emergency queue. Patient was not added again.");
             return;
         }
 
@@ -258,6 +270,16 @@ public class HospitalSystem {
                 return input;
             }
             System.out.println("Input cannot be empty. Please try again.");
+        }
+    }
+
+    private int readAge() {
+        while (true) {
+            int age = readNumber("Age: ", 0);
+            if (age <= 150) {
+                return age;
+            }
+            System.out.println("Please enter an age from 0 to 150.");
         }
     }
 

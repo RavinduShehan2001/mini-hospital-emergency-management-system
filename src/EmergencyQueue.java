@@ -15,6 +15,17 @@ public class EmergencyQueue {
         return front == null;
     }
 
+    public boolean containsPatient(int patientId) {
+        Node current = front;
+        while (current != null) {
+            if (current.patient.getPatientId() == patientId) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
     public void enqueue(Patient patient) {
         if (patient == null) {
             System.out.println("Cannot add a null patient to the emergency queue.");
